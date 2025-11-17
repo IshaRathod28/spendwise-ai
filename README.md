@@ -15,7 +15,7 @@ AI-powered expense tracking app with Ruby on Rails API backend and Flutter mobil
 ```
 spendwise-ai/
 ├── backend/    # Rails 7.1.6 API (Ruby 3.3.3)
-└── mobile/     # Flutter 3.24.5 App (Dart 3.5.0)
+└── frontend/     # Flutter 3.24.5 App (Dart 3.5.0)
 ```
 
 ## 🚀 Quick Start
@@ -30,10 +30,10 @@ rails db:create db:migrate db:seed
 rails server -b 0.0.0.0 -p 3000
 ```
 
-### Mobile Setup
+### Frontend Setup
 
 ```bash
-cd mobile
+cd frontend
 flutter pub get
 # Update API URL in lib/services/transaction_provider.dart
 flutter run -d DEVICE_ID
@@ -72,8 +72,8 @@ DELETE /api/v1/transactions/:id   # Delete transaction
 docker build -t spendwise-backend .
 docker run -p 3000:3000 spendwise-backend
 
-# Mobile (APK)
-cd mobile && flutter build apk --release
+# Frontend (APK)
+cd frontend && flutter build apk --release
 ```
 
 ## 👨‍💻 Author
