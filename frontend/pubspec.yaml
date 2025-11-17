@@ -1,0 +1,48 @@
+name: expense_tracker_app
+description: "AI-powered expense tracker with payment screenshot recognition"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # API & Network
+  http: ^1.1.0
+  
+  # Image handling
+  image_picker: ^1.0.0
+  
+  # Charts & Visualization
+  fl_chart: ^0.65.0
+  
+  # Date & Time formatting
+  intl: ^0.19.0
+  
+  # Local storage
+  shared_preferences: ^2.2.2
+  
+  # State management
+  provider: ^6.1.1
+  
+  # Icons
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # Add custom fonts (optional)
+  # fonts:
+  #   - family: Poppins
+  #     fonts:
+  #       - asset: fonts/Poppins-Regular.ttf
+  #       - asset: fonts/Poppins-Bold.ttf
+  #         weight: 700
