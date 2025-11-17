@@ -326,74 +326,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildPeriodSelector() {
-    final periods = ['Today', 'This Week', 'This Month', 'Last 7 Days', 'Last 30 Days', 'All Time'];
-    
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    final periods = [
+      'Today',
+      'This Week',
+      'This Month',
+      'Last 7 Days',
+      'Last 30 Days',
+      'All Time'
+    ];
+
+    return Row(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: periods.map((period) {
-                  final isSelected = _selectedPeriod == period;
-                  return FilterChip(
-                        label: Text(period),
-                        selected: isSelected,
-                        onSelected: (selected) {
-                          if (selected) _setPeriod(period);
-                        },
-                        selectedColor: Theme.of(context).colorScheme.primaryContainer,
-                  );
-                }).toList(),
-              ),
-            ),
-            IconButton.filled(
-              onPressed: _selectDateRange,
-              icon: const Icon(Icons.calendar_today_rounded, size: 20),
-              tooltip: 'Custom Date Range',
-              style: IconButton.styleFrom(
-                backgroundColor: _selectedPeriod == 'Custom' 
-                    ? Theme.of(context).colorScheme.primaryContainer
-                    : null,
-              ),
-            ),
-          ],
-        ),
-        if (_startDate != null && _endDate != null) ...[
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.date_range,
-                  size: 16,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '${DateFormat('MMM dd').format(_startDate!)} - ${DateFormat('MMM dd, yyyy').format(_endDate!)}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
+        Expanded(
+          child: DropdownButton<String>(
+            value: _selectedPeriod,
+            isExpanded: true,
+            items: periods.map((period) {
+              return DropdownMenuItem(
+                value: period,
+                child: Text(period),
+              );
+            }).toList(),
+            onChanged: (value) {
+              if (value != null) {
+                _setPeriod(value);
+              }
+            },
           ),
-        ],
+        ),
+        IconButton(
+          onPressed: _selectDateRange,
+          icon: const Icon(Icons.calendar_today_rounded),
+          tooltip: 'Custom Date Range',
+          color: _selectedPeriod == 'Custom'
+              ? Theme.of(context).colorScheme.primary
+              : null,
+        ),
       ],
     );
   }
+
 
   Widget _buildSummaryCards(List<Transaction> transactions, double totalSpent) {
     final avgDaily = _getAverageDailySpending(transactions);
