@@ -20,6 +20,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedPeriod = 'Last 7 Days';
+    _setPeriod(_selectedPeriod);
     Future.microtask(() =>
         Provider.of<TransactionProvider>(context, listen: false).fetchTransactions());
   }
@@ -338,29 +340,116 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Row(
       children: [
         Expanded(
-          child: DropdownButton<String>(
-            value: _selectedPeriod,
-            isExpanded: true,
-            items: periods.map((period) {
-              return DropdownMenuItem(
-                value: period,
-                child: Text(period),
-              );
-            }).toList(),
-            onChanged: (value) {
-              if (value != null) {
-                _setPeriod(value);
-              }
+          child: PopupMenuButton<String>(
+            offset: const Offset(0, 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 8,
+            color: Theme.of(context).colorScheme.surface,
+            child: Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(12),
+                color: Theme.of(context).colorScheme.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _selectedPeriod,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down_rounded,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 24,
+                  ),
+                ],
+              ),
+            ),
+            itemBuilder: (BuildContext context) {
+              return periods.map((period) {
+                return PopupMenuItem<String>(
+                  value: period,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: _selectedPeriod == period
+                          ? Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      period,
+                      style: TextStyle(
+                        color: _selectedPeriod == period
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.onSurface,
+                        fontWeight: _selectedPeriod == period
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList();
+            },
+            onSelected: (value) {
+              _setPeriod(value);
             },
           ),
         ),
-        IconButton(
-          onPressed: _selectDateRange,
-          icon: const Icon(Icons.calendar_today_rounded),
-          tooltip: 'Custom Date Range',
-          color: _selectedPeriod == 'Custom'
-              ? Theme.of(context).colorScheme.primary
-              : null,
+        const SizedBox(width: 8),
+        Container(
+          height: 48,
+          width: 48,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(12),
+            color: _selectedPeriod == 'Custom'
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Theme.of(context).colorScheme.surface,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: IconButton(
+            onPressed: _selectDateRange,
+            icon: Icon(
+              Icons.calendar_today_rounded,
+              size: 20,
+              color: _selectedPeriod == 'Custom'
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            tooltip: 'Custom Date Range',
+          ),
         ),
       ],
     );
